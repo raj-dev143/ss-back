@@ -8,17 +8,19 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
-
 const mongoUrl = process.env.MONGODB_URI;
 
-mongoose.connect(mongoUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.once("open", () => {
-  console.log("Connected to MongoDB");
-});
+mongoose
+  .connect(mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err.message);
+  });
 
 // Define schema
 const eventSchema = new mongoose.Schema({
