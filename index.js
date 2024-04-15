@@ -25,8 +25,10 @@ mongoose
 // Define schema
 const eventSchema = new mongoose.Schema({
   title: String,
+  bookedBy: String,
   start: Date,
   end: Date,
+  charges: Number,
 });
 
 // Define model
@@ -47,8 +49,8 @@ app.get("/api/events", async (req, res) => {
 });
 
 app.post("/api/events", async (req, res) => {
-  const { title, start, end } = req.body;
-  const newEvent = new Event({ title, start, end });
+  const { title, bookedBy, start, end, charges } = req.body;
+  const newEvent = new Event({ title, bookedBy, start, end, charges });
   try {
     const savedEvent = await newEvent.save();
     res
