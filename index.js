@@ -29,6 +29,8 @@ const eventSchema = new mongoose.Schema({
   start: Date,
   end: Date,
   charges: Number,
+  ground: String, 
+  ball: String, 
 });
 
 // Define model
@@ -49,8 +51,8 @@ app.get("/api/events", async (req, res) => {
 });
 
 app.post("/api/events", async (req, res) => {
-  const { title, bookedBy, start, end, charges } = req.body;
-  const newEvent = new Event({ title, bookedBy, start, end, charges });
+  const { title, bookedBy, start, end, charges, ground, ball } = req.body; // Extract 'ground' from request body
+  const newEvent = new Event({ title, bookedBy, start, end, charges, ground, ball }); // Include 'ground' in new event
   try {
     const savedEvent = await newEvent.save();
     res
