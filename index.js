@@ -31,6 +31,7 @@ const eventSchema = new mongoose.Schema({
   charges: Number,
   ground: String,
   ball: String,
+  food: String,
 });
 
 // Define model
@@ -51,7 +52,7 @@ app.get("/api/events", async (req, res) => {
 });
 
 app.post("/api/events", async (req, res) => {
-  const { title, bookedBy, start, end, charges, ground, ball } = req.body;
+  const { title, bookedBy, start, end, charges, ground, ball, food } = req.body;
   const newEvent = new Event({
     title,
     bookedBy,
@@ -60,6 +61,7 @@ app.post("/api/events", async (req, res) => {
     charges,
     ground,
     ball,
+    food,
   });
   try {
     const savedEvent = await newEvent.save();
@@ -73,7 +75,7 @@ app.post("/api/events", async (req, res) => {
 
 app.put("/api/events/:id", async (req, res) => {
   const { id } = req.params;
-  const { title, bookedBy, start, end, charges, ground, ball } = req.body;
+  const { title, bookedBy, start, end, charges, ground, ball, food } = req.body;
   try {
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
@@ -85,6 +87,7 @@ app.put("/api/events/:id", async (req, res) => {
         charges,
         ground,
         ball,
+        food,
       },
       { new: true }
     );
