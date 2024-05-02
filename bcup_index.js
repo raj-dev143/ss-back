@@ -45,14 +45,7 @@ app.use(bodyParser.json());
 app.get("/api/events", async (req, res) => {
   try {
     const events = await Event.find();
-    // Convert dates to user's timezone before sending to client
-    const userTimezoneOffset = new Date().getTimezoneOffset() * 60000; // Offset in milliseconds
-    const eventsInLocalTimezone = events.map((event) => ({
-      ...event._doc,
-      start: new Date(event.start - userTimezoneOffset).toISOString(),
-      end: new Date(event.end - userTimezoneOffset).toISOString(),
-    }));
-    res.json(eventsInLocalTimezone);
+    res.json(events);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -60,14 +53,11 @@ app.get("/api/events", async (req, res) => {
 
 app.post("/api/events", async (req, res) => {
   const { title, bookedBy, start, end, charges, ground, ball, food } = req.body;
-  // Convert start and end dates to UTC before saving
-  const startUTC = new Date(start).toISOString();
-  const endUTC = new Date(end).toISOString();
   const newEvent = new Event({
     title,
     bookedBy,
-    start: startUTC,
-    end: endUTC,
+    start,
+    end,
     charges,
     ground,
     ball,
@@ -86,17 +76,14 @@ app.post("/api/events", async (req, res) => {
 app.put("/api/events/:id", async (req, res) => {
   const { id } = req.params;
   const { title, bookedBy, start, end, charges, ground, ball, food } = req.body;
-  // Convert start and end dates to UTC before updating
-  const startUTC = new Date(start).toISOString();
-  const endUTC = new Date(end).toISOString();
   try {
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
       {
         title,
         bookedBy,
-        start: startUTC,
-        end: endUTC,
+        start,
+        end,
         charges,
         ground,
         ball,
